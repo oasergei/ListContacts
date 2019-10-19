@@ -125,9 +125,9 @@ class ContactsTableViewController: UITableViewController {
         return tableViewCell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 70
+//    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let viewModel = viewModel else { return }
@@ -137,6 +137,10 @@ class ContactsTableViewController: UITableViewController {
         guard let detailVC = storyboard.instantiateViewController(withIdentifier: "DetailViewControllerID") as? DetailTableViewController else { return }
         detailVC.viewModel = viewModel.viewModelForSelectedRow()
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 
 }

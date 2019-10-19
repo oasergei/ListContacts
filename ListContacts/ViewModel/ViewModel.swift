@@ -41,7 +41,7 @@ class ViewModel: ContactsTableViewViewModelType {
 
         let networkManager = NetworkManager()
        
-        DispatchQueue.global(qos: .userInteractive).async {
+        //DispatchQueue.global(qos: .userInteractive).async {
             
             networkManager.fetchContacts { [weak self] result in
                 
@@ -66,7 +66,7 @@ class ViewModel: ContactsTableViewViewModelType {
                     }
                 }
             }
-        }
+        //}
     }
     
     func searchContacts(predicate: NSPredicate) {

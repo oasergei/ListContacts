@@ -13,7 +13,7 @@ enum ServerResult {
     case error(String)
 }
 
-class NetworkManager: NSObject {
+class NetworkManager {
     
     private let baseURL = "https://raw.githubusercontent.com/SkbkonturMobile/mobile-test-ios/master/json/"
     private let getFirstPath =  "generated-01.json"
@@ -26,18 +26,22 @@ class NetworkManager: NSObject {
 
     func fetchContacts(completion: @escaping (ServerResult) -> ()) {
         var contacts = [Contact]()
+        let group = DispatchGroup()
         
         for url in urls {
             
+            group.enter()
+            
             guard let urlServer = URL(string: url) else {
-                completion(ServerResult.error("url is wrong"))
+                print("url is wrong")
+                group.leave()
                 return
             }
             
             URLSession.shared.dataTask(with: urlServer) { (data, response, error) in
                 guard let data = data, response != nil, error == nil else {
                     print("something is wrong")
-                    completion(ServerResult.error("something is wrong"))
+                    group.leave()
                     return
                 }
                 
@@ -46,15 +50,20 @@ class NetworkManager: NSObject {
                     let partContacts = try JSONDecoder().decode([Contact].self, from: data)
                     contacts += partContacts
                     
-                    if url == self.urls.last {
-                        completion(ServerResult.success(contacts))
-                    }
+                    group.leave()
                     
                 } catch let err {
                     print("error getJSONContent is \(err)")
-                    completion(ServerResult.error(err.localizedDescription))
+                    //completion(ServerResult.error(err.localizedDescription))
+                    group.leave()
                 }
             }.resume()
+            
+            group.notify(queue: DispatchQueue.global(qos: .userInitiated)) {
+                print("contacts.count: \(contacts.count)")
+                completion(ServerResult.success(contacts))
+            }
+            
         }
     }
 }
