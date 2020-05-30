@@ -8,10 +8,10 @@
 
 import Foundation
 
-enum ServerResult {
-    case success([Contact])
-    case error(String)
-}
+//enum ServerResult {
+//    case success([Contact])
+//    case error(String)
+//}
 
 class NetworkManager {
     
@@ -24,7 +24,7 @@ class NetworkManager {
         return [baseURL + getFirstPath, baseURL + getSecondPath, baseURL + getThirdPath]
     }
 
-    func fetchContacts(completion: @escaping (ServerResult) -> ()) {
+    func fetchContacts(completion: @escaping (Result<[Contact], Error>) -> ()) {
         var contacts = [Contact]()
         let group = DispatchGroup()
         
@@ -61,7 +61,7 @@ class NetworkManager {
             
             group.notify(queue: DispatchQueue.global(qos: .userInitiated)) {
                 print("contacts.count: \(contacts.count)")
-                completion(ServerResult.success(contacts))
+                completion(.success(contacts))
             }
             
         }

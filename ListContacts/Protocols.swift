@@ -11,8 +11,8 @@ import Foundation
 protocol ContactsTableViewViewModelType {
     func numberOfRows() -> Int
     func cellViewModel(forIndexPath indexPath: IndexPath) -> ContactTableViewCellViewModelType?
-    func fetchContacts(completion: @escaping (ServerResult) -> ())
-    func loadContactsFromDB(completion: @escaping (ServerResult) -> ())
+    func fetchContacts(completion: @escaping (Result<[Contact], Error>) -> ())
+    func loadContactsFromDB(completion: @escaping (Result<[Contact], Error>) -> ())
     func searchContacts(predicate: NSPredicate)
     func viewModelForSelectedRow() -> DetailViewModelType?
     func selectRow(indexPath: IndexPath)

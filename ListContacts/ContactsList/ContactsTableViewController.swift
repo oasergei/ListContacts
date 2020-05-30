@@ -43,7 +43,7 @@ class ContactsTableViewController: UITableViewController {
         viewModel?.loadContactsFromDB { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case .error(let error):
+                case .failure(let error):
                     print(error)
                     UIApplication.shared.showErrorLabel(withText: "Нет подключения к сети")
                 case .success( _):
@@ -71,7 +71,7 @@ class ContactsTableViewController: UITableViewController {
         viewModel?.fetchContacts(completion: { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case .error(let error):
+                case .failure(let error):
                     print(error)
                     UIApplication.shared.showErrorLabel(withText: "Нет подключения к сети")
                 case .success( _):

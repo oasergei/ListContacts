@@ -24,7 +24,7 @@ class ViewModel: ContactsTableViewViewModelType {
         return ContactTableViewCellViewModel(contact: contact)
     }
     
-    func loadContactsFromDB(completion: @escaping (ServerResult) -> ()) {
+    func loadContactsFromDB(completion: @escaping (Result<[Contact], Error>) -> ()) {
         
         self.contactsDB = Array(database.getDataFromDb())
         
@@ -33,11 +33,11 @@ class ViewModel: ContactsTableViewViewModelType {
                 completion(result)
             }
         } else {
-            completion(ServerResult.success([]))
+            completion(.success([]))
         }
     }
     
-    func fetchContacts(completion: @escaping (ServerResult) -> ()) {
+    func fetchContacts(completion: @escaping (Result<[Contact], Error>) -> ()) {
 
         let networkManager = NetworkManager()
        
@@ -58,9 +58,9 @@ class ViewModel: ContactsTableViewViewModelType {
                     DispatchQueue.main.async {
                         let database: RealmManager = RealmManager()
                         self?.contactsDB = Array((database.getDataFromDb()))
-                        completion(ServerResult.success([]))
+                        completion(.success([]))
                     }
-                case .error( _):
+                case  .failure(_):
                     DispatchQueue.main.async {
                         completion(result)
                     }
